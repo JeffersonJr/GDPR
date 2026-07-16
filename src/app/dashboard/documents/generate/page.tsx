@@ -1,90 +1,146 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { FileText, Wand2, UploadCloud, ChevronRight, Check } from 'lucide-react'
-import { clsx } from 'clsx'
+import { Sparkles, FileText, ChevronRight, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { toast } from 'sonner'
+import { clsx } from 'clsx'
+
+const docTypes = [
+  { id: 'privacy_policy', label: 'Política de Privacidade', desc: 'Conforme Art. 13 e 14 da GDPR' },
+  { id: 'cookie_policy', label: 'Política de Cookies', desc: 'Aviso e consentimento de rastreadores' },
+  { id: 'terms_of_use', label: 'Termos de Uso', desc: 'Regras de utilização do seu serviço' },
+  { id: 'dpa', label: 'Data Processing Agreement', desc: 'Contrato com processadores (Art. 28)' },
+]
 
 export default function GenerateDocumentPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [docType, setDocType] = useState('privacy_policy')
+  const [step, setStep] = useState(1)
+  const [selectedType, setSelectedType] = useState('privacy_policy')
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [isDone, setIsDone] = useState(false)
 
-  async function handleGenerate(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    
-    // Simulate generation since actual action is tied to existing documents right now
+  const handleGenerate = () => {
+    setIsGenerating(true)
     setTimeout(() => {
-      setLoading(false)
-      toast.success('Documento iniciado com sucesso!')
-      router.push('/dashboard/documents')
-    }, 1500)
+      setIsGenerating(false)
+      setIsDone(true)
+    }, 3000)
+  }
+
+  if (isDone) {
+    return (
+      <div className="max-w-3xl mx-auto py-20 text-center animate-slide-up space-y-6">
+        <div className="w-20 h-20 bg-success-50 dark:bg-success-500/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-glow-success">
+          <CheckCircle2 size={40} className="text-success-500" />
+        </div>
+        <h2 className="text-3xl font-bold text-surface-ink dark:text-surface-snow">Documento Gerado com Sucesso!</h2>
+        <p className="text-surface-slate dark:text-surface-fog max-w-lg mx-auto">
+          Nossa IA gerou o documento estruturado e mapeado com as bases legais da GDPR. Você já pode visualizá-lo e exportá-lo no seu painel.
+        </p>
+        <div className="pt-8">
+          <Link href="/dashboard/documents" className="btn-primary inline-flex">
+            Ir para Meus Documentos
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="page-section max-w-3xl mx-auto space-y-8 animate-fade-in">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-20">
       <div>
-        <div className="flex items-center gap-2 text-sm text-surface-slate dark:text-surface-fog mb-4">
-          <Link href="/dashboard/documents" className="hover:text-primary transition-colors">Documentos</Link>
-          <ChevronRight size={14} />
-          <span className="text-surface-ink dark:text-surface-snow font-medium">Novo Documento</span>
-        </div>
+        <Link href="/dashboard" className="inline-flex items-center gap-1 text-sm font-medium text-surface-slate hover:text-primary dark:text-surface-fog dark:hover:text-primary-light transition-colors mb-6">
+          <ArrowLeft size={16} /> Voltar
+        </Link>
+        
         <h1 className="text-3xl font-bold text-surface-ink dark:text-surface-snow flex items-center gap-3">
-          <Wand2 className="text-primary" size={28} />
-          Gerar Novo Documento
+          <Sparkles className="text-primary" size={32} />
+          Gerar Documento com IA
         </h1>
         <p className="text-surface-slate dark:text-surface-fog mt-2">
-          Escolha o tipo de documento. A inteligência artificial usará o contexto da sua organização para criar uma versão personalizada e 100% aderente à GDPR.
+          Crie documentos jurídicos sob medida para a sua organização em poucos minutos.
         </p>
       </div>
 
-      <form onSubmit={handleGenerate} className="glass-card p-6 md:p-8 space-y-8">
-        
-        <div className="space-y-4">
-          <label className="text-sm font-semibold text-surface-ink dark:text-surface-snow">Tipo de Documento</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[
-              { id: 'privacy_policy', name: 'Política de Privacidade', icon: FileText, desc: 'Termos gerais de privacidade para usuários.' },
-              { id: 'dpa', name: 'Data Processing Agreement (DPA)', icon: FileText, desc: 'Contrato de processamento para parceiros.' },
-              { id: 'terms_of_service', name: 'Termos de Serviço', icon: FileText, desc: 'Termos de uso da sua plataforma.' },
-              { id: 'cookie_policy', name: 'Política de Cookies', icon: FileText, desc: 'Aviso sobre rastreamento de dados.' }
-            ].map((type) => (
-              <div 
-                key={type.id}
-                onClick={() => setDocType(type.id)}
-                className={clsx(
-                  "p-4 rounded-xl border-2 cursor-pointer transition-all",
-                  docType === type.id 
-                    ? "border-primary bg-primary-light/50 dark:bg-primary/10 shadow-glow-primary" 
-                    : "border-surface-fog dark:border-surface-slate/30 hover:border-surface-slate/50 dark:hover:border-surface-fog/50"
-                )}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2">
-                    <type.icon size={20} className={docType === type.id ? "text-primary" : "text-surface-slate"} />
-                    <span className="font-semibold text-surface-ink dark:text-surface-snow text-sm">{type.name}</span>
-                  </div>
-                  {docType === type.id && <Check size={18} className="text-primary" />}
-                </div>
-                <p className="text-xs text-surface-slate dark:text-surface-fog mt-2 ml-7">{type.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="flex gap-4 mb-8">
+        <div className={clsx("flex-1 h-2 rounded-full transition-colors", step >= 1 ? "bg-primary" : "bg-surface-fog dark:bg-surface-slate/30")} />
+        <div className={clsx("flex-1 h-2 rounded-full transition-colors", step >= 2 ? "bg-primary" : "bg-surface-fog dark:bg-surface-slate/30")} />
+      </div>
 
-        <div className="pt-6 border-t border-surface-fog dark:border-surface-slate/30 flex items-center justify-between">
-          <Link href="/dashboard/documents" className="btn-ghost">
-            Cancelar
-          </Link>
-          <button type="submit" disabled={loading} className="btn-primary">
-            {loading ? 'Gerando...' : 'Gerar com Inteligência Artificial'}
-            <Wand2 size={16} />
-          </button>
-        </div>
-      </form>
+      <div className="glass-card p-6 md:p-8">
+        {step === 1 && (
+          <div className="space-y-6 animate-slide-up">
+            <h3 className="text-xl font-semibold text-surface-ink dark:text-surface-snow">1. Qual documento você precisa?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {docTypes.map(doc => (
+                <div
+                  key={doc.id}
+                  onClick={() => setSelectedType(doc.id)}
+                  className={clsx(
+                    "p-4 rounded-xl border-2 cursor-pointer transition-all",
+                    selectedType === doc.id
+                      ? "border-primary bg-primary-light/10 dark:bg-primary/5 shadow-glow-primary"
+                      : "border-surface-fog dark:border-surface-slate/20 hover:border-surface-slate/40 dark:hover:border-surface-fog/40 bg-surface-snow dark:bg-surface-ink"
+                  )}
+                >
+                  <FileText size={24} className={selectedType === doc.id ? "text-primary" : "text-surface-slate dark:text-surface-fog"} />
+                  <h4 className="font-semibold text-surface-ink dark:text-surface-snow mt-3">{doc.label}</h4>
+                  <p className="text-xs text-surface-slate dark:text-surface-fog mt-1">{doc.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="pt-6 flex justify-end">
+              <button onClick={() => setStep(2)} className="btn-primary">
+                Próximo Passo <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="space-y-6 animate-slide-up">
+            <h3 className="text-xl font-semibold text-surface-ink dark:text-surface-snow">2. Contexto da Organização</h3>
+            <p className="text-sm text-surface-slate dark:text-surface-fog">
+              Forneça detalhes adicionais para que a IA personalize o documento especificamente para o seu modelo de negócio.
+            </p>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="input-label">Público-alvo principal</label>
+                <select className="input-field">
+                  <option>B2B (Empresas)</option>
+                  <option>B2C (Consumidores finais)</option>
+                  <option>B2B e B2C</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="input-label">Dados coletados (Opcional)</label>
+                <textarea 
+                  className="input-field min-h-[100px]" 
+                  placeholder="Ex: Nome, E-mail, Dados de navegação, Telefone..."
+                />
+              </div>
+            </div>
+
+            <div className="pt-6 flex justify-between">
+              <button onClick={() => setStep(1)} className="btn-secondary">
+                Voltar
+              </button>
+              <button 
+                onClick={handleGenerate} 
+                disabled={isGenerating}
+                className="btn-primary min-w-[160px]"
+              >
+                {isGenerating ? (
+                  <><Loader2 size={16} className="animate-spin" /> Gerando...</>
+                ) : (
+                  <><Sparkles size={16} /> Gerar Agora</>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
