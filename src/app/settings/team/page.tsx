@@ -12,6 +12,8 @@ export default function TeamPage() {
     { id: 3, name: 'Charlie Davis', email: 'charlie@empresa.com', role: 'Membro', status: 'Pendente' },
   ])
 
+  const [showInviteModal, setShowInviteModal] = useState(false)
+
   const handleRoleChange = (id: number, newRole: string) => {
     setTeamMembers(prev => prev.map(m => m.id === id ? { ...m, role: newRole } : m))
     toast.success('Permissão alterada com sucesso!')
@@ -22,7 +24,19 @@ export default function TeamPage() {
     toast.success('Membro removido da organização.')
   }
 
-  const handleInvite = () => {
+  const handleInviteSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const newMember = {
+      id: Date.now(),
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      role: formData.get('role') as string,
+      status: 'Pendente'
+    }
+    
+    setTeamMembers(prev => [...prev, newMember])
+    setShowInviteModal(false)
     toast.success('Convite enviado com sucesso para o novo membro!')
   }
 
@@ -39,7 +53,7 @@ export default function TeamPage() {
           </p>
         </div>
         
-        <button onClick={handleInvite} className="btn-primary">
+        <button onClick={() => setShowInviteModal(true)} className="btn-primary">
           <UserPlus size={16} />
           Convidar Membro
         </button>
@@ -127,6 +141,55 @@ export default function TeamPage() {
           </table>
         </div>
       </div>
+
+      {showInviteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-ink/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-surface-ink w-full max-w-md rounded-2xl shadow-2xl border border-surface-fog dark:border-surface-slate/20 overflow-hidden">
+            <div className="p-6 border-b border-surface-fog dark:border-surface-slate/20 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-surface-ink dark:text-surface-snow flex items-center gap-2">
+                <UserPlus size={20} className="text-primary" />
+                Convidar Membro
+              </h2>
+            </div>
+            
+            <form onSubmit={handleInviteSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="input-label">Nome Completo</label>
+                <input name="name" type="text" className="input-field" placeholder="Ex: João Silva" required />
+              </div>
+              
+              <div>
+                <label className="input-label">E-mail Profissional</label>
+                <input name="email" type="email" className="input-field" placeholder="joao@empresa.com" required />
+              </div>
+
+              <div>
+                <label className="input-label">Telefone (Opcional)</label>
+                <input name="phone" type="tel" className="input-field" placeholder="(00) 00000-0000" />
+              </div>
+
+              <div>
+                <label className="input-label">Permissão</label>
+                <select name="role" className="input-field" required defaultValue="Membro">
+                  <option value="Administrador">Administrador (Acesso total)</option>
+                  <option value="DPO">DPO (Focado em conformidade)</option>
+                  <option value="Membro">Membro (Edição de documentos)</option>
+                  <option value="Visualizador">Visualizador (Apenas leitura)</option>
+                </select>
+              </div>
+              
+              <div className="pt-4 flex justify-end gap-3">
+                <button type="button" onClick={() => setShowInviteModal(false)} className="btn-ghost">
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-primary">
+                  Enviar Convite
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
