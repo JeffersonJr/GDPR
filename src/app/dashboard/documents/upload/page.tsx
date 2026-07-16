@@ -43,7 +43,7 @@ export default function UploadDocumentPage() {
       const { data: doc, error: createErr } = await createDocumentAction({
         org_id: profile.org_id,
         name: file.name,
-        type: 'upload',
+        type: 'other',
         status: 'analyzing',
         generated_by_ai: false,
         original_url: publicUrl
