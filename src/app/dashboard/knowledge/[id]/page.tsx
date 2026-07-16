@@ -1,6 +1,7 @@
 import { ChevronLeft, Scale, Clock, User } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import ReactMarkdown from 'react-markdown'
 
 export const metadata = {
   title: 'Artigo | Base de Conhecimento | E-Compliance',
@@ -154,33 +155,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
     notFound()
   }
 
-  // Basic markdown to HTML parse (paragraphs and bold text)
-  const formatContent = (text: string) => {
-    return text.split('\n\n').map((paragraph, i) => {
-      let formatted = paragraph
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n/g, '<br />')
-      
-      if (formatted.startsWith('### ')) {
-        return <h3 key={i} className="text-xl font-bold text-surface-ink dark:text-surface-snow mt-8 mb-4">{formatted.replace('### ', '')}</h3>
-      }
-      if (formatted.startsWith('- ')) {
-        const listItems = formatted.split('<br />').map((item, j) => (
-          <li key={j} className="ml-4 mb-2 list-disc" dangerouslySetInnerHTML={{ __html: item.replace('- ', '') }} />
-        ))
-        return <ul key={i} className="mb-4 text-surface-slate dark:text-surface-fog leading-relaxed">{listItems}</ul>
-      }
-      if (formatted.startsWith('1. ') || formatted.match(/^\d+\. /)) {
-        const listItems = formatted.split('<br />').map((item, j) => (
-          <li key={j} className="ml-4 mb-2 list-decimal" dangerouslySetInnerHTML={{ __html: item.replace(/^\d+\. /, '') }} />
-        ))
-        return <ul key={i} className="mb-4 text-surface-slate dark:text-surface-fog leading-relaxed">{listItems}</ul>
-      }
-      
-      return <p key={i} className="mb-4 text-surface-slate dark:text-surface-fog leading-relaxed" dangerouslySetInnerHTML={{ __html: formatted }} />
-    })
-  }
-
   return (
     <div className="page-section max-w-3xl mx-auto space-y-8 animate-fade-in pb-20">
       <div>
@@ -213,8 +187,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         </div>
       </div>
 
-      <article className="prose prose-slate dark:prose-invert max-w-none">
-        {formatContent(article.content.trim())}
+      <article className="prose prose-slate dark:prose-invert max-w-none prose-headings:text-surface-ink dark:prose-headings:text-surface-snow prose-p:text-surface-slate dark:prose-p:text-surface-fog prose-a:text-primary prose-strong:text-surface-ink dark:prose-strong:text-surface-snow">
+        <ReactMarkdown>{article.content.trim()}</ReactMarkdown>
       </article>
       
       <div className="mt-12 p-6 bg-surface-snow dark:bg-surface-ink border border-surface-fog dark:border-surface-slate/20 rounded-2xl">
