@@ -492,6 +492,13 @@ CREATE POLICY "audit_select_admin"
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 VALUES 
   (
+    'documents',
+    'documents',
+    TRUE,
+    52428800,
+    ARRAY['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain', 'text/markdown']
+  ),
+  (
     'documents-original',
     'documents-original',
     FALSE,
@@ -549,6 +556,16 @@ CREATE POLICY "storage_compliant_insert"
     bucket_id = 'documents-compliant'
     AND (storage.foldername(name))[1] = my_org_id()::TEXT
   );
+
+CREATE POLICY "documents_bucket_select"
+  ON storage.objects FOR SELECT
+  TO authenticated
+  USING (bucket_id = 'documents');
+
+CREATE POLICY "documents_bucket_insert"
+  ON storage.objects FOR INSERT
+  TO authenticated
+  WITH CHECK (bucket_id = 'documents');
 
 -- ================================================================
 -- SEED DATA (for local dev / testing only)
