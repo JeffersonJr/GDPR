@@ -4,6 +4,7 @@
 
 /* ============================================================
    E-Compliance — Global Styles
+   Clean UI (60/30/10)
    ============================================================ */
 
 @layer base {
@@ -11,13 +12,13 @@
     --radius: 0.75rem;
   }
 
-  * {
-    @apply border-slate-800;
+  body {
+    @apply bg-surface-cream text-surface-ink dark:bg-surface-ink dark:text-surface-snow;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  body {
-    @apply bg-slate-950 text-slate-100;
-    font-feature-settings: "rlig" 1, "calt" 1;
+  * {
+    @apply border-surface-fog dark:border-surface-slate;
   }
 
   /* Custom Scrollbar */
@@ -26,104 +27,97 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-slate-900;
+    @apply bg-surface-cream dark:bg-surface-ink;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded-full;
+    @apply bg-surface-fog dark:bg-surface-slate rounded-full;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-600;
+    @apply bg-surface-slate dark:bg-surface-fog;
   }
 
   /* Selection */
   ::selection {
-    @apply bg-brand-600/30 text-brand-100;
+    @apply bg-primary/20 dark:bg-primary/30 text-primary dark:text-primary-light;
   }
 }
 
 @layer components {
-  /* ---- Glassmorphism Card ---- */
+  /* ---- Clean Card ---- */
   .glass-card {
-    @apply bg-slate-900/60 backdrop-blur-md border border-slate-800/60 rounded-2xl;
+    @apply bg-white dark:bg-surface-ink border border-surface-fog dark:border-surface-slate rounded-2xl shadow-card dark:shadow-none;
   }
 
   .glass-card-hover {
-    @apply glass-card transition-all duration-200 hover:bg-slate-900/80 hover:border-brand-600/30 hover:shadow-glow-brand;
-  }
-
-  /* ---- Brand Gradient ---- */
-  .brand-gradient {
-    @apply bg-gradient-to-r from-brand-500 to-brand-700;
-  }
-
-  .brand-gradient-text {
-    @apply bg-gradient-to-r from-brand-400 to-brand-600 bg-clip-text text-transparent;
+    @apply glass-card transition-all duration-200 hover:border-primary/50 hover:shadow-card-hover;
   }
 
   /* ---- Buttons ---- */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 
-           bg-brand-600 hover:bg-brand-700 text-white font-semibold 
+           bg-primary hover:bg-primary-hover text-white font-semibold 
            rounded-xl transition-all duration-200 
-           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-slate-950
-           active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-glow-brand;
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-cream dark:focus:ring-offset-surface-ink
+           active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 
-           bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold 
-           rounded-xl border border-slate-700 hover:border-slate-600
-           transition-all duration-200 
-           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-slate-950
+           bg-white dark:bg-surface-ink hover:bg-surface-snow dark:hover:bg-surface-slate/20 
+           text-surface-ink dark:text-surface-snow font-semibold 
+           rounded-xl border border-surface-fog dark:border-surface-slate hover:border-surface-slate dark:hover:border-surface-fog
+           transition-all duration-200 shadow-sm dark:shadow-none
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-cream dark:focus:ring-offset-surface-ink
            active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 
-           text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-medium 
+           text-surface-slate dark:text-surface-fog hover:text-surface-ink dark:hover:text-surface-snow 
+           hover:bg-surface-snow dark:hover:bg-surface-slate/20 font-medium 
            rounded-xl transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-1 focus:ring-offset-slate-950;
+           focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 focus:ring-offset-surface-cream dark:focus:ring-offset-surface-ink;
   }
 
   .btn-danger {
     @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 
-           bg-danger-500 hover:bg-danger-700 text-white font-semibold 
+           bg-danger-500 hover:bg-danger-600 text-white font-semibold 
            rounded-xl transition-all duration-200 
-           focus:outline-none focus:ring-2 focus:ring-danger-500 focus:ring-offset-2 focus:ring-offset-slate-950
+           focus:outline-none focus:ring-2 focus:ring-danger-500 focus:ring-offset-2 focus:ring-offset-surface-cream dark:focus:ring-offset-surface-ink
            active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* ---- Form Inputs ---- */
   .input-field {
-    @apply w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl
-           text-slate-100 placeholder-slate-500
-           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
+    @apply w-full px-4 py-3 bg-white dark:bg-surface-ink border border-surface-fog dark:border-surface-slate rounded-xl
+           text-surface-ink dark:text-surface-snow placeholder-surface-slate dark:placeholder-surface-fog shadow-sm dark:shadow-none
+           focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
            transition-all duration-200;
   }
 
   .input-label {
-    @apply block text-sm font-medium text-slate-300 mb-1.5;
+    @apply block text-sm font-medium text-surface-ink/80 dark:text-surface-snow/80 mb-1.5;
   }
 
   /* ---- Status Badges ---- */
   .badge-missing {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium
-           bg-slate-800 text-slate-400 border border-slate-700;
+           bg-surface-snow dark:bg-surface-slate/20 text-surface-slate dark:text-surface-fog border border-surface-fog dark:border-surface-slate;
   }
 
   .badge-pending {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium
-           bg-warning-500/10 text-warning-500 border border-warning-500/20;
+           bg-warning-50 text-warning-600 dark:bg-warning-500/10 dark:text-warning-500 border border-warning-500/20;
   }
 
   .badge-analyzing {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium
-           bg-brand-500/10 text-brand-400 border border-brand-500/20;
+           bg-primary-light text-primary dark:bg-primary/10 border border-primary/20;
   }
 
   .badge-compliant {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium
-           bg-success-500/10 text-success-500 border border-success-500/20;
+           bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-500 border border-success-500/20;
   }
 
   /* ---- Page Section ---- */
@@ -134,17 +128,22 @@
   /* ---- Sidebar Nav Item ---- */
   .nav-item {
     @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium 
-           text-slate-400 hover:text-slate-100 hover:bg-slate-800/80 
+           text-surface-slate dark:text-surface-fog hover:text-surface-ink dark:hover:text-surface-snow 
+           hover:bg-surface-snow dark:hover:bg-surface-slate/20 
            transition-all duration-150 cursor-pointer;
   }
 
   .nav-item-active {
-    @apply nav-item bg-brand-600/15 text-brand-400 hover:bg-brand-600/20 hover:text-brand-300;
+    @apply nav-item bg-primary-light text-primary dark:bg-primary/15 dark:text-primary-light hover:bg-primary-light/80;
+  }
+  
+  /* Gradiente e texto descontinuados, redirecionando para a cor sólida */
+  .brand-gradient {
+    @apply bg-primary;
   }
 
-  /* ---- Score Ring ---- */
-  .score-ring {
-    @apply relative inline-flex items-center justify-center;
+  .brand-gradient-text {
+    @apply text-primary;
   }
 }
 
@@ -159,26 +158,6 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
-  }
-
-  /* Animated gradient border */
-  .gradient-border {
-    position: relative;
-  }
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    background: linear-gradient(135deg, #3370fa, #153bdc, #3370fa);
-    background-size: 200% 200%;
-    animation: gradient-shift 3s ease infinite;
-    z-index: -1;
-  }
-
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
   }
 
   /* Noise texture overlay */

@@ -5,42 +5,55 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // E-Compliance Brand Palette
-        brand: {
-          50:  '#eef5ff',
-          100: '#d9e9ff',
-          200: '#bcd6ff',
-          300: '#8ebcff',
-          400: '#5996fd',
-          500: '#3370fa',
-          600: '#1a4fef',
-          700: '#153bdc',
-          800: '#1831b2',
-          900: '#1a2e8c',
-          950: '#141e5a',
+        // E-Compliance Clean Identity
+        primary: {
+          DEFAULT: '#3c91bb',
+          hover: '#31789c',
+          light: '#e6f2f7',
         },
-        slate: {
-          850: '#1a2035',
-          950: '#0d1117',
+        secondary: {
+          DEFAULT: '#17cba2',
+          hover: '#13a987',
+          light: '#e1faf4',
+        },
+        accent: {
+          DEFAULT: '#f59e0b',
+          hover: '#d97706',
+          light: '#fef3c7',
+        },
+        surface: {
+          cream: '#FDFBF7',
+          snow: '#FAFAFA',
+          fog: '#E5E5E5',
+          slate: '#737373',
+          ink: '#171717',
+        },
+        brand: { // fallback mapping for existing components not fully refactored
+          50:  '#e6f2f7',
+          400: '#3c91bb',
+          500: '#3c91bb',
+          600: '#31789c',
+          700: '#265d7a',
         },
         success: {
-          50:  '#f0fdf4',
-          500: '#22c55e',
-          700: '#15803d',
+          50:  '#e1faf4',
+          500: '#17cba2',
+          600: '#13a987',
         },
         warning: {
-          50:  '#fffbeb',
+          50:  '#fef3c7',
           500: '#f59e0b',
-          700: '#b45309',
+          600: '#d97706',
         },
         danger: {
           50:  '#fff1f2',
           500: '#f43f5e',
-          700: '#be123c',
-        },
+          600: '#e11d48',
+        }
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
@@ -48,8 +61,6 @@ module.exports = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-brand': 'linear-gradient(135deg, #3370fa 0%, #153bdc 100%)',
-        'gradient-dark': 'linear-gradient(180deg, #0d1117 0%, #141e5a 100%)',
         'noise': "url('/noise.svg')",
       },
       animation: {
@@ -58,7 +69,6 @@ module.exports = {
         'slide-in-right': 'slideInRight 0.3s ease-out',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'spin-slow': 'spin 3s linear infinite',
-        'shimmer': 'shimmer 1.5s infinite',
       },
       keyframes: {
         fadeIn: {
@@ -73,16 +83,11 @@ module.exports = {
           '0%': { opacity: '0', transform: 'translateX(16px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
         },
-        shimmer: {
-          '100%': { transform: 'translateX(100%)' },
-        },
       },
       boxShadow: {
-        'glow-brand': '0 0 30px -5px rgba(51, 112, 250, 0.4)',
-        'glow-success': '0 0 20px -5px rgba(34, 197, 94, 0.4)',
-        'glow-danger': '0 0 20px -5px rgba(244, 63, 94, 0.4)',
-        'card': '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
-        'card-hover': '0 4px 12px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.12)',
+        'glow-primary': '0 0 20px -5px rgba(60, 145, 187, 0.3)',
+        'card': '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+        'card-hover': '0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.06)',
       },
       borderRadius: {
         '2xl': '1rem',

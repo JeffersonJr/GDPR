@@ -43,14 +43,22 @@ export default function LoginPage() {
     }
   }
 
+  async function handleGoogleLogin() {
+    setLoading(true)
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    })
+  }
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold text-white">Bem-vindo de volta</h2>
-        <p className="text-slate-400 text-sm">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Bem-vindo de volta</h2>
+        <p className="text-slate-600 dark:text-slate-400 text-sm">
           Não tem uma conta?{' '}
-          <Link href="/auth/register" className="text-brand-400 hover:text-brand-300 font-medium transition-colors">
+          <Link href="/auth/register" className="text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 font-medium transition-colors">
             Criar conta grátis
           </Link>
         </p>
@@ -61,7 +69,7 @@ export default function LoginPage() {
         <div>
           <label htmlFor="email" className="input-label">E-mail</label>
           <div className="relative">
-            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
             <input
               id="email" type="email" autoComplete="email" required
               value={email} onChange={e => setEmail(e.target.value)}
@@ -76,13 +84,13 @@ export default function LoginPage() {
             <label htmlFor="password" className="input-label mb-0">Senha</label>
             <Link
               href="/auth/forgot-password"
-              className="text-xs text-brand-400 hover:text-brand-300 transition-colors"
+              className="text-xs text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors"
             >
               Esqueceu a senha?
             </Link>
           </div>
           <div className="relative">
-            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
             <input
               id="password" type={showPassword ? 'text' : 'password'}
               autoComplete="current-password" required
@@ -93,7 +101,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
               aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -117,22 +125,18 @@ export default function LoginPage() {
       {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-800" />
+          <div className="w-full border-t border-slate-200 dark:border-slate-800" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-slate-950 px-3 text-slate-500">ou continue com</span>
+          <span className="bg-slate-50 dark:bg-slate-950 px-3 text-slate-500 dark:text-slate-500">ou continue com</span>
         </div>
       </div>
 
       {/* Google */}
       <button
         type="button"
-        onClick={async () => {
-          await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: { redirectTo: `${window.location.origin}/auth/callback` },
-          })
-        }}
+        onClick={handleGoogleLogin}
+        disabled={loading}
         className="btn-secondary w-full"
         id="btn-google-login"
       >
@@ -151,7 +155,7 @@ export default function LoginPage() {
           type="button"
           onClick={handleDevLogin}
           disabled={loading}
-          className="btn-secondary w-full border-brand-500/30 text-brand-400 bg-brand-500/5 hover:bg-brand-500/10"
+          className="btn-secondary w-full border-brand-500/30 text-brand-500 bg-brand-500/5 hover:bg-brand-500/10"
         >
           <Code size={18} />
           Bypass Login (Ambiente Local)
@@ -161,7 +165,7 @@ export default function LoginPage() {
       {/* Trust signals */}
       <div className="flex items-center justify-center gap-4 pt-2">
         {['🔒 SSL/TLS', '🇪🇺 GDPR', '🛡️ SOC 2'].map(badge => (
-          <span key={badge} className="text-xs text-slate-600">{badge}</span>
+          <span key={badge} className="text-xs text-slate-500 dark:text-slate-600">{badge}</span>
         ))}
       </div>
     </div>

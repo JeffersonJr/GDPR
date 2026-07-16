@@ -75,20 +75,20 @@ export default function DocumentsList({ documents, orgId }: Props) {
 
   return (
     <div className="glass-card overflow-hidden">
-      <div className="p-6 border-b border-slate-800/60 flex items-center justify-between">
+      <div className="p-6 border-b border-slate-200 dark:border-slate-800/60 flex items-center justify-between">
         <div>
-          <h2 className="font-semibold text-white">Documentos de Conformidade</h2>
-          <p className="text-sm text-slate-400 mt-0.5">
+          <h2 className="font-semibold text-slate-900 dark:text-white">Documentos de Conformidade</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             {compliantCount} de {total} documentos regularizados
           </p>
         </div>
         {/* Progress bar */}
         <div className="hidden md:block w-40">
-          <div className="flex justify-between text-xs text-slate-500 mb-1">
+          <div className="flex justify-between text-xs text-slate-600 dark:text-slate-500 mb-1">
             <span>Progresso</span>
             <span>{Math.round((compliantCount / total) * 100)}%</span>
           </div>
-          <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-brand-500 to-brand-600 rounded-full transition-all duration-500"
               style={{ width: `${(compliantCount / total) * 100}%` }}
@@ -97,29 +97,29 @@ export default function DocumentsList({ documents, orgId }: Props) {
         </div>
       </div>
 
-      <div className="divide-y divide-slate-800/60">
+      <div className="divide-y divide-slate-200 dark:divide-slate-800/60">
         {rows.map((doc) => (
           <div
             key={doc.type}
-            className="flex items-center justify-between px-6 py-4 hover:bg-slate-800/30 transition-colors group"
+            className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group"
           >
             {/* Left */}
             <div className="flex items-center gap-4 min-w-0">
               <div className={clsx(
                 'w-9 h-9 rounded-xl flex items-center justify-center shrink-0',
                 doc.status === 'compliant' ? 'bg-success-500/10' :
-                doc.status === 'missing' ? 'bg-slate-800' : 'bg-brand-500/10',
+                doc.status === 'missing' ? 'bg-slate-100 dark:bg-slate-800' : 'bg-brand-500/10',
               )}>
                 <FileText size={16} className={clsx(
                   doc.status === 'compliant' ? 'text-success-500' :
-                  doc.status === 'missing' ? 'text-slate-600' : 'text-brand-400',
+                  doc.status === 'missing' ? 'text-slate-400 dark:text-slate-600' : 'text-brand-400',
                 )} />
               </div>
               <div className="min-w-0">
-                <div className="font-medium text-sm text-white truncate">
+                <div className="font-medium text-sm text-slate-900 dark:text-white truncate">
                   {DOC_TYPE_LABELS[doc.type as DocumentType]}
                 </div>
-                <div className="text-xs text-slate-500 flex items-center gap-2 mt-0.5">
+                <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
                   {doc.generated_by_ai && (
                     <span className="flex items-center gap-1 text-brand-500">
                       <Sparkles size={10} /> Gerado por IA

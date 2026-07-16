@@ -9,6 +9,8 @@ const inter = Inter({
   display: 'swap',
 })
 
+import { ThemeProvider } from '@/components/ThemeProvider'
+
 export const metadata: Metadata = {
   title: {
     default: 'E-Compliance | GDPR Compliance Platform',
@@ -32,20 +34,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className="dark">
-      <body className={`${inter.variable} font-sans antialiased bg-slate-950 text-slate-100`}>
-        {children}
-        <Toaster
-          position="top-right"
-          theme="dark"
-          richColors
-          toastOptions={{
-            style: {
-              background: '#1a2035',
-              border: '1px solid rgba(51,112,250,0.2)',
-            },
-          }}
-        />
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className={`${inter.variable} font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100`}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          {children}
+          <Toaster position="top-right" richColors />
+        </ThemeProvider>
       </body>
     </html>
   )

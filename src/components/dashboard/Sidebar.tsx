@@ -53,31 +53,31 @@ export default function Sidebar({ profile }: SidebarProps) {
   }
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-64 bg-slate-900/80 backdrop-blur-md border-r border-slate-800/60 flex flex-col z-40 hidden lg:flex">
+    <aside className="fixed left-0 top-0 bottom-0 w-64 bg-surface-cream/80 dark:bg-surface-ink/80 backdrop-blur-md border-r border-surface-fog dark:border-surface-slate/20 flex flex-col z-40 hidden lg:flex">
       {/* Logo */}
-      <div className="p-6 border-b border-slate-800/60">
+      <div className="p-6 border-b border-surface-fog dark:border-surface-slate/20">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 brand-gradient rounded-xl flex items-center justify-center shadow-glow-brand shrink-0">
+          <div className="w-8 h-8 bg-primary rounded-xl flex items-center justify-center shrink-0">
             <ShieldCheck size={16} className="text-white" />
           </div>
           <div className="min-w-0">
-            <div className="font-bold text-white text-sm tracking-tight truncate">E-Compliance</div>
-            <div className="text-xs text-slate-500 truncate">{org?.name ?? 'Carregando...'}</div>
+            <div className="font-bold text-surface-ink dark:text-surface-snow text-sm tracking-tight truncate">E-Compliance</div>
+            <div className="text-xs text-surface-slate dark:text-surface-fog truncate">{org?.name ?? 'Carregando...'}</div>
           </div>
         </div>
       </div>
 
       {/* Plan badge */}
-      <div className="px-4 py-3 border-b border-slate-800/60">
+      <div className="px-4 py-3 border-b border-surface-fog dark:border-surface-slate/20">
         <div className={clsx(
           'flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium',
-          planTier === 'free' && 'bg-slate-800 text-slate-400',
-          planTier === 'pro' && 'bg-brand-600/15 text-brand-400 border border-brand-600/20',
-          planTier === 'enterprise' && 'bg-warning-500/10 text-warning-500 border border-warning-500/20',
+          planTier === 'free' && 'bg-surface-snow dark:bg-surface-slate/10 text-surface-slate dark:text-surface-fog',
+          planTier === 'pro' && 'bg-primary-light text-primary dark:bg-primary/15 dark:text-primary-light border border-primary/20',
+          planTier === 'enterprise' && 'bg-warning-50 text-warning-600 dark:bg-warning-500/10 dark:text-warning-500 border border-warning-500/20',
         )}>
           <span>Plano {planLabels[planTier]}</span>
           {planTier === 'free' && (
-            <Link href="/settings/billing" className="text-brand-400 hover:text-brand-300 flex items-center gap-0.5">
+            <Link href="/settings/billing" className="text-primary hover:text-primary-hover dark:text-primary-light dark:hover:text-white flex items-center gap-0.5">
               Upgrade <ChevronRight size={12} />
             </Link>
           )}
@@ -102,7 +102,7 @@ export default function Sidebar({ profile }: SidebarProps) {
       </nav>
 
       {/* Bottom nav + user */}
-      <div className="p-4 border-t border-slate-800/60 space-y-1">
+      <div className="p-4 border-t border-surface-fog dark:border-surface-slate/20 space-y-1">
         {bottomNavItems.map(({ href, label, icon: Icon }) => (
           <Link
             key={href}
@@ -115,18 +115,18 @@ export default function Sidebar({ profile }: SidebarProps) {
         ))}
 
         {/* User card */}
-        <div className="mt-3 pt-3 border-t border-slate-800/60">
+        <div className="mt-3 pt-3 border-t border-surface-fog dark:border-surface-slate/20">
           <div className="flex items-center gap-3 px-2 py-2">
-            <div className="w-8 h-8 rounded-full brand-gradient flex items-center justify-center shrink-0 text-white text-xs font-bold">
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 text-white text-xs font-bold">
               {profile?.full_name?.charAt(0) ?? '?'}
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-xs font-medium text-white truncate">{profile?.full_name}</div>
-              <div className="text-xs text-slate-500 truncate">{profile?.email}</div>
+              <div className="text-xs font-medium text-surface-ink dark:text-surface-snow truncate">{profile?.full_name}</div>
+              <div className="text-xs text-surface-slate dark:text-surface-fog truncate">{profile?.email}</div>
             </div>
             <button
               onClick={handleSignOut}
-              className="text-slate-500 hover:text-danger-500 transition-colors"
+              className="text-surface-slate hover:text-danger-500 dark:text-surface-fog dark:hover:text-danger-500 transition-colors"
               title="Sair"
               id="btn-signout"
             >

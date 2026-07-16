@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-slate-950 flex">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex">
       {/* Left panel — branding */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-slate-900 via-brand-950 to-slate-950">
         {/* Decorative glows */}
@@ -50,9 +50,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               { value: '< 24h', label: 'Diagnóstico completo' },
               { value: 'ISO 27001', label: 'Padrão adotado' },
             ].map((stat) => (
-              <div key={stat.label} className="glass-card p-4 text-center">
+              <div key={stat.label} className="p-4 text-center bg-slate-900/40 backdrop-blur-md border border-slate-700/50 rounded-2xl">
                 <div className="text-2xl font-bold brand-gradient-text">{stat.value}</div>
-                <div className="text-xs text-slate-500 mt-1">{stat.label}</div>
+                <div className="text-xs text-slate-400 mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -69,7 +69,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               </svg>
             </div>
-            <span className="font-bold text-white">E-Compliance</span>
+            <span className="font-bold text-slate-900 dark:text-white">E-Compliance</span>
           </div>
 
           {children}

@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import Sidebar from '@/components/dashboard/Sidebar'
 import TopBar from '@/components/dashboard/TopBar'
 
-export default async function DashboardLayout({
+export default async function SettingsLayout({
   children,
 }: {
   children: React.ReactNode
@@ -13,14 +13,12 @@ export default async function DashboardLayout({
 
   if (!user) redirect('/auth/login')
 
-  // Fetch profile + organization
   const { data: profile } = await supabase
     .from('profiles')
     .select('*, organizations(*)')
     .eq('id', user.id)
     .single()
 
-  // If onboarding not completed, redirect there
   if (profile?.organizations && !profile.organizations.onboarding_completed) {
     redirect('/onboarding')
   }

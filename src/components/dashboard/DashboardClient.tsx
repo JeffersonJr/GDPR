@@ -36,7 +36,7 @@ function ScoreRing({ score }: { score: number }) {
     <div className="flex flex-col items-center gap-4">
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="-rotate-90">
-          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#1e293b" strokeWidth={10} />
+          <circle cx={size / 2} cy={size / 2} r={radius} fill="none" className="stroke-slate-200 dark:stroke-slate-800" strokeWidth={10} />
           <circle
             cx={size / 2} cy={size / 2} r={radius} fill="none"
             stroke={color} strokeWidth={10}
@@ -46,8 +46,8 @@ function ScoreRing({ score }: { score: number }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-3xl font-black text-white">{score}</span>
-          <span className="text-[10px] text-slate-500 font-medium">/ 100</span>
+          <span className="text-3xl font-black text-slate-900 dark:text-white">{score}</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">/ 100</span>
         </div>
       </div>
       <div className="flex items-center gap-1.5 text-sm font-medium" style={{ color }}>
@@ -66,14 +66,14 @@ function StatCard({
   icon: React.ElementType; iconColor: string; trend?: string
 }) {
   return (
-    <div className="glass-card p-5 flex items-start gap-4 hover:border-slate-700/60 transition-all group">
+    <div className="glass-card p-5 flex items-start gap-4 hover:border-slate-300 dark:hover:border-slate-700/60 transition-all group">
       <div className={clsx('w-10 h-10 rounded-xl flex items-center justify-center shrink-0', iconColor)}>
         <Icon size={18} className="text-white" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-2xl font-black text-white">{value}</div>
-        <div className="text-xs text-slate-400 mt-0.5">{label}</div>
-        {sub && <div className="text-xs text-slate-500 mt-1">{sub}</div>}
+        <div className="text-2xl font-black text-slate-900 dark:text-white">{value}</div>
+        <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{label}</div>
+        {sub && <div className="text-xs text-slate-400 dark:text-slate-500 mt-1">{sub}</div>}
       </div>
       {trend && (
         <div className="flex items-center gap-0.5 text-xs text-success-500 font-medium">
@@ -121,22 +121,22 @@ function DocumentRow({ doc, type }: { doc: DocRow; type: string }) {
   return (
     <div className={clsx(
       'flex items-center gap-4 px-5 py-4 transition-all group',
-      'hover:bg-slate-800/30 border-b border-slate-800/50 last:border-0',
+      'hover:bg-slate-50 dark:hover:bg-slate-800/30 border-b border-slate-200 dark:border-slate-800/50 last:border-0',
       isCompliant && 'hover:bg-success-500/5',
     )}>
       {/* Icon */}
       <div className={clsx(
         'w-9 h-9 rounded-xl flex items-center justify-center shrink-0',
-        isCompliant ? 'bg-success-500/10' : isMissing ? 'bg-slate-800/80' : 'bg-brand-500/10',
+        isCompliant ? 'bg-success-500/10' : isMissing ? 'bg-slate-100 dark:bg-slate-800/80' : 'bg-brand-500/10',
       )}>
         <FileText size={15} className={clsx(
-          isCompliant ? 'text-success-500' : isMissing ? 'text-slate-600' : 'text-brand-400',
+          isCompliant ? 'text-success-500' : isMissing ? 'text-slate-400 dark:text-slate-600' : 'text-brand-400',
         )} />
       </div>
 
       {/* Name */}
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-sm text-white truncate">{getDocumentTypeLabel(type)}</div>
+        <div className="font-medium text-sm text-slate-900 dark:text-white truncate">{getDocumentTypeLabel(type)}</div>
         {doc.generated_by_ai && (
           <div className="flex items-center gap-1 text-xs text-brand-500 mt-0.5">
             <Sparkles size={10} /> Gerado por IA
@@ -167,7 +167,7 @@ function DocumentRow({ doc, type }: { doc: DocRow; type: string }) {
               </Link>
               <Link
                 href={`/dashboard/documents/upload?type=${type}`}
-                className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold rounded-lg border border-slate-600 transition-all"
+                className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 transition-all"
                 id={`btn-upload-${type}`}
               >
                 <Upload size={11} /> Upload
@@ -177,7 +177,7 @@ function DocumentRow({ doc, type }: { doc: DocRow; type: string }) {
           {doc.id && (doc.status === 'analyzed' || isCompliant) && (
             <Link
               href={`/dashboard/documents/${doc.id}`}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 text-xs font-medium rounded-lg border border-slate-700 transition-all"
+              className="flex items-center gap-1 px-2.5 py-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium rounded-lg border border-slate-300 dark:border-slate-700 transition-all"
               id={`btn-view-${doc.id}`}
             >
               <Eye size={11} /> Ver
@@ -218,12 +218,12 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
             Olá, {firstName} 👋
           </h1>
-          <p className="text-slate-400 mt-1">
+          <p className="text-slate-600 dark:text-slate-400 mt-1">
             Status de conformidade da{' '}
-            <span className="text-white font-semibold">{org?.name}</span>
+            <span className="text-slate-900 dark:text-white font-semibold">{org?.name}</span>
           </p>
         </div>
         <Link
@@ -240,8 +240,8 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
         {/* Score card */}
         <div className="glass-card p-6 flex flex-col items-center gap-4 lg:col-span-1">
           <div className="w-full flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Score GDPR</span>
-            <Link href="/dashboard/reports" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Score GDPR</span>
+            <Link href="/dashboard/reports" className="text-xs text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 flex items-center gap-1">
               Detalhes <ArrowUpRight size={12} />
             </Link>
           </div>
@@ -250,9 +250,9 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
           <div className="w-full space-y-1.5">
             <div className="flex justify-between text-xs text-slate-500">
               <span>Documentos</span>
-              <span className="text-white">{compliantCount}/{totalRequired}</span>
+              <span className="text-slate-900 dark:text-white">{compliantCount}/{totalRequired}</span>
             </div>
-            <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-brand-500 to-brand-400 rounded-full transition-all duration-700"
                 style={{ width: `${progressPct}%` }}
@@ -302,7 +302,7 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
           {
             id: 'qa-upload',
             href: '/dashboard/documents/upload',
-            gradient: 'from-slate-700 to-slate-800',
+            gradient: 'from-slate-800 to-slate-900 dark:from-slate-700 dark:to-slate-800',
             glow: '',
             icon: Upload,
             title: 'Melhorar Documento Existente',
@@ -331,27 +331,27 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
       {/* Documents list */}
       <div className="glass-card overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800/60">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-slate-800/60">
           <div>
-            <h2 className="font-semibold text-white">Documentos de Conformidade</h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <h2 className="font-semibold text-slate-900 dark:text-white">Documentos de Conformidade</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               {compliantCount} de {totalRequired} regularizados · {progressPct}% completo
             </p>
           </div>
           <div className="flex items-center gap-3">
             {/* Progress pill */}
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded-xl">
-              <div className="w-24 h-1.5 bg-slate-700 rounded-full overflow-hidden">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl">
+              <div className="w-24 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-brand-500 to-brand-400 rounded-full"
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
-              <span className="text-xs text-slate-400 font-medium">{progressPct}%</span>
+              <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">{progressPct}%</span>
             </div>
             <Link
               href="/dashboard/documents"
-              className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1 font-medium transition-colors"
+              className="text-xs text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 flex items-center gap-1 font-medium transition-colors"
             >
               Ver todos <ArrowUpRight size={12} />
             </Link>
@@ -371,11 +371,11 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
 
         {/* Footer CTA if many missing */}
         {missingCount > 0 && (
-          <div className="px-5 py-4 border-t border-slate-800/60 bg-brand-600/5 flex items-center justify-between gap-4">
+          <div className="px-5 py-4 border-t border-slate-200 dark:border-slate-800/60 bg-brand-50 dark:bg-brand-600/5 flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-sm">
-              <Sparkles size={14} className="text-brand-400" />
-              <span className="text-slate-300">
-                <span className="text-white font-semibold">{missingCount} documentos</span> podem ser gerados automaticamente pela IA
+              <Sparkles size={14} className="text-brand-500 dark:text-brand-400" />
+              <span className="text-slate-700 dark:text-slate-300">
+                <span className="text-slate-900 dark:text-white font-semibold">{missingCount} documentos</span> podem ser gerados automaticamente pela IA
               </span>
             </div>
             <Link
@@ -391,3 +391,4 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
     </div>
   )
 }
+

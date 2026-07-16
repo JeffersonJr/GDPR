@@ -118,8 +118,8 @@ function ScoreRing({ score, size = 140 }: { score: number; size?: number }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-3xl font-black text-white">{score}</span>
-          <span className="text-xs text-slate-400">/ 100</span>
+          <span className="text-3xl font-black text-slate-900 dark:text-white">{score}</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">/ 100</span>
         </div>
       </div>
       <span className="px-3 py-1 rounded-full text-xs font-semibold border" style={{ color, borderColor: color + '40', background: color + '15' }}>
@@ -141,9 +141,9 @@ function ResultStep({ form, score, requiredDocs, onFinish, loading }: {
     <div className="space-y-6 animate-slide-up">
       {/* Score hero */}
       <div className="text-center space-y-2">
-        <p className="text-sm text-slate-400 uppercase tracking-wider font-medium">Diagnóstico GDPR</p>
-        <h2 className="text-2xl font-bold text-white">Perfil de Conformidade</h2>
-        <p className="text-slate-400 text-sm">de <span className="text-white font-semibold">{form.org_name}</span></p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider font-medium">Diagnóstico GDPR</p>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Perfil de Conformidade</h2>
+        <p className="text-slate-600 dark:text-slate-400 text-sm">de <span className="text-slate-900 dark:text-white font-semibold">{form.org_name}</span></p>
       </div>
 
       <div className="flex justify-center">
@@ -153,8 +153,8 @@ function ResultStep({ form, score, requiredDocs, onFinish, loading }: {
       {/* Summary stats */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: 'Documentos necessários', value: requiredDocs.length, color: 'text-white' },
-          { label: 'Para gerar com IA', value: toGenerate, color: 'text-brand-400' },
+          { label: 'Documentos necessários', value: requiredDocs.length, color: 'text-slate-900 dark:text-white' },
+          { label: 'Para gerar com IA', value: toGenerate, color: 'text-brand-600 dark:text-brand-400' },
           { label: 'Para melhorar', value: toImprove, color: 'text-warning-500' },
         ].map(stat => (
           <div key={stat.label} className="glass-card p-4 text-center">
@@ -178,9 +178,9 @@ function ResultStep({ form, score, requiredDocs, onFinish, loading }: {
             { label: 'ISO 27001', value: form.has_iso_cert ? 'Sim' : 'Não' },
             { label: 'Volume de dados', value: DATA_VOLUMES.find(d => d.value === form.data_volume)?.label ?? '' },
           ].map(item => (
-            <div key={item.label} className="flex justify-between gap-2 py-1.5 border-b border-slate-800/60 last:border-0">
-              <span className="text-slate-500">{item.label}</span>
-              <span className="text-slate-200 font-medium text-right">{item.value}</span>
+            <div key={item.label} className="flex justify-between gap-2 py-1.5 border-b border-slate-200 dark:border-slate-800/60 last:border-0">
+              <span className="text-slate-600 dark:text-slate-500">{item.label}</span>
+              <span className="text-slate-800 dark:text-slate-200 font-medium text-right">{item.value}</span>
             </div>
           ))}
         </div>
@@ -195,11 +195,11 @@ function ResultStep({ form, score, requiredDocs, onFinish, loading }: {
           {requiredDocs.slice(0, 5).map(doc => {
             const hasDoc = form.existing_documents.includes(doc)
             return (
-              <div key={doc} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-900/60">
+              <div key={doc} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-900/60">
                 {hasDoc
                   ? <CheckCircle2 size={14} className="text-success-500 shrink-0" />
-                  : <Sparkles size={14} className="text-brand-400 shrink-0" />}
-                <span className="text-xs text-slate-300">{getDocumentTypeLabel(doc)}</span>
+                  : <Sparkles size={14} className="text-brand-500 dark:text-brand-400 shrink-0" />}
+                <span className="text-xs text-slate-700 dark:text-slate-300">{getDocumentTypeLabel(doc)}</span>
                 <span className={clsx('ml-auto text-xs px-2 py-0.5 rounded-full border',
                   hasDoc ? 'text-warning-500 bg-warning-500/10 border-warning-500/20' : 'text-brand-400 bg-brand-500/10 border-brand-500/20'
                 )}>
@@ -343,17 +343,17 @@ export default function OnboardingPage() {
                   'w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300',
                   isDone ? 'bg-brand-600 shadow-glow-brand' :
                   isActive ? 'bg-brand-600/20 border-2 border-brand-500' :
-                  'bg-slate-800 border border-slate-700',
+                  'bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700',
                 )}>
                   {isDone
                     ? <CheckCircle2 size={15} className="text-white" />
-                    : <Icon size={14} className={isActive ? 'text-brand-400' : 'text-slate-600'} />
+                    : <Icon size={14} className={isActive ? 'text-brand-600 dark:text-brand-400' : 'text-slate-500 dark:text-slate-600'} />
                   }
                 </div>
                 {i < STEPS.length - 1 && (
                   <div className={clsx(
                     'flex-1 h-0.5 rounded-full transition-all duration-500',
-                    isDone ? 'bg-brand-600' : 'bg-slate-800',
+                    isDone ? 'bg-brand-600' : 'bg-slate-200 dark:bg-slate-800',
                   )} />
                 )}
               </div>
@@ -363,11 +363,11 @@ export default function OnboardingPage() {
 
         {/* Progress bar */}
         <div>
-          <div className="flex justify-between text-xs text-slate-500 mb-2">
-            <span className="font-medium text-slate-300">{STEPS[step - 1].title}</span>
+          <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
+            <span className="font-medium text-slate-700 dark:text-slate-300">{STEPS[step - 1].title}</span>
             <span>{step} de {totalSteps} etapas</span>
           </div>
-          <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-brand-500 to-brand-400 rounded-full transition-all duration-500"
               style={{ width: `${progress + (100 / totalSteps)}%` }}
@@ -376,8 +376,8 @@ export default function OnboardingPage() {
         </div>
 
         <div>
-          <h1 className="text-2xl font-bold text-white">{STEPS[step - 1].title}</h1>
-          <p className="text-slate-400 text-sm mt-1">{STEPS[step - 1].description}</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{STEPS[step - 1].title}</h1>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">{STEPS[step - 1].description}</p>
         </div>
       </div>
 
@@ -451,8 +451,8 @@ export default function OnboardingPage() {
                     className={clsx(
                       'flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-medium border transition-all text-left',
                       form.niche === n.value
-                        ? 'bg-brand-600/20 border-brand-500 text-white shadow-glow-brand/20'
-                        : 'bg-slate-900/80 border-slate-700/80 text-slate-400 hover:border-slate-600 hover:text-slate-300',
+                        ? 'bg-brand-600/20 border-brand-500 text-brand-700 dark:text-white shadow-glow-brand/20'
+                        : 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-700/80 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-300',
                     )}
                   >
                     <span className="text-base">{n.icon}</span>
@@ -473,8 +473,8 @@ export default function OnboardingPage() {
                     className={clsx(
                       'flex items-center gap-3 px-4 py-3 rounded-xl border transition-all',
                       form.size === s.value
-                        ? 'bg-brand-600/20 border-brand-500 text-white'
-                        : 'bg-slate-900/80 border-slate-700/80 text-slate-400 hover:border-slate-600',
+                        ? 'bg-brand-600/20 border-brand-500 text-brand-700 dark:text-white'
+                        : 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-700/80 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-600',
                     )}
                   >
                     <span className="text-lg">{s.icon}</span>
@@ -535,8 +535,8 @@ export default function OnboardingPage() {
                       className={clsx(
                         'w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border transition-all',
                         form.data_volume === v.value
-                          ? 'bg-brand-600/20 border-brand-500 text-white'
-                          : 'bg-slate-900/80 border-slate-700/80 text-slate-400 hover:border-slate-600',
+                          ? 'bg-brand-600/20 border-brand-500 text-brand-700 dark:text-white'
+                          : 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-700/80 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-600',
                       )}
                     >
                       <div className={clsx(
@@ -569,8 +569,8 @@ export default function OnboardingPage() {
         {/* STEP 5 — Existing Docs */}
         {step === 5 && (
           <div className="space-y-4">
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Marque os documentos que a empresa <span className="text-white font-medium">já possui</span>. A IA irá auditá-los e propor melhorias. Os demais serão gerados do zero.
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Marque os documentos que a empresa <span className="text-slate-900 dark:text-white font-medium">já possui</span>. A IA irá auditá-los e propor melhorias. Os demais serão gerados do zero.
             </p>
             <div className="space-y-2">
               {DOCUMENT_OPTIONS.map(doc => {
@@ -582,15 +582,15 @@ export default function OnboardingPage() {
                     className={clsx(
                       'w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl border transition-all text-left group',
                       checked
-                        ? 'bg-success-500/8 border-success-500/30 text-white'
-                        : 'bg-slate-900/80 border-slate-700/80 text-slate-400 hover:border-slate-600 hover:text-slate-300',
+                        ? 'bg-success-500/8 border-success-500/30 text-success-700 dark:text-white'
+                        : 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-700/80 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-300',
                     )}
                   >
                     <span className="text-lg">{doc.icon}</span>
                     <span className="font-medium text-sm flex-1">{doc.label}</span>
                     <div className={clsx(
                       'w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all',
-                      checked ? 'bg-success-500 border-success-500' : 'border-slate-600 group-hover:border-slate-500',
+                      checked ? 'bg-success-500 border-success-500' : 'border-slate-300 dark:border-slate-600 group-hover:border-slate-400 dark:group-hover:border-slate-500',
                     )}>
                       {checked && <CheckCircle2 size={11} className="text-white" />}
                     </div>
@@ -655,12 +655,12 @@ function ToggleCard({ id, title, description, checked, onChange, icon, warning }
           ? warning
             ? 'bg-warning-500/10 border-warning-500/40'
             : 'bg-brand-600/15 border-brand-500/50'
-          : 'bg-slate-900/80 border-slate-700/80 hover:border-slate-600',
+          : 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-700/80 hover:border-slate-400 dark:hover:border-slate-600',
       )}
     >
       {icon && <span className="text-xl mt-0.5 shrink-0">{icon}</span>}
       <div className="flex-1">
-        <div className={clsx('font-semibold text-sm', checked ? 'text-white' : 'text-slate-300')}>
+        <div className={clsx('font-semibold text-sm', checked ? 'text-brand-700 dark:text-white' : 'text-slate-700 dark:text-slate-300')}>
           {title}
         </div>
         <div className="text-xs text-slate-500 mt-0.5 leading-relaxed">{description}</div>
@@ -669,7 +669,7 @@ function ToggleCard({ id, title, description, checked, onChange, icon, warning }
         'mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all',
         checked
           ? warning ? 'bg-warning-500 border-warning-500' : 'bg-brand-500 border-brand-500'
-          : 'border-slate-600',
+          : 'border-slate-300 dark:border-slate-600',
       )}>
         {checked && <div className="w-2 h-2 bg-white rounded-full" />}
       </div>

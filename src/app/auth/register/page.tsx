@@ -62,10 +62,10 @@ export default function RegisterPage() {
           </div>
         </div>
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-white">Conta criada!</h2>
-          <p className="text-slate-400 text-sm leading-relaxed">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Conta criada!</h2>
+          <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
             Enviamos um link de confirmação para{' '}
-            <strong className="text-white">{email}</strong>.<br />
+            <strong className="text-slate-900 dark:text-white">{email}</strong>.<br />
             Verifique sua caixa de entrada para ativar sua conta.
           </p>
         </div>
@@ -74,9 +74,9 @@ export default function RegisterPage() {
           {['Confirme seu e-mail', 'Complete o onboarding', 'Receba seu diagnóstico GDPR'].map((step, i) => (
             <div key={step} className="flex items-center gap-3 text-sm">
               <div className="w-5 h-5 rounded-full bg-brand-600/20 border border-brand-600/40 flex items-center justify-center shrink-0">
-                <span className="text-xs text-brand-400 font-bold">{i + 1}</span>
+                <span className="text-xs text-brand-600 dark:text-brand-400 font-bold">{i + 1}</span>
               </div>
-              <span className="text-slate-300">{step}</span>
+              <span className="text-slate-700 dark:text-slate-300">{step}</span>
             </div>
           ))}
         </div>
@@ -90,10 +90,10 @@ export default function RegisterPage() {
   return (
     <div className="space-y-6 animate-slide-up">
       <div className="space-y-1">
-        <h2 className="text-2xl font-bold text-white">Criar conta grátis</h2>
-        <p className="text-slate-400 text-sm">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Criar conta grátis</h2>
+        <p className="text-slate-600 dark:text-slate-400 text-sm">
           Já tem uma conta?{' '}
-          <Link href="/auth/login" className="text-brand-400 hover:text-brand-300 font-medium transition-colors">
+          <Link href="/auth/login" className="text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 font-medium transition-colors">
             Entrar
           </Link>
         </p>
@@ -104,7 +104,7 @@ export default function RegisterPage() {
         <div>
           <label htmlFor="reg-name" className="input-label">Nome completo</label>
           <div className="relative">
-            <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+            <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
             <input
               id="reg-name" type="text" autoComplete="name" required
               value={name} onChange={e => setName(e.target.value)}
@@ -118,7 +118,7 @@ export default function RegisterPage() {
         <div>
           <label htmlFor="reg-email" className="input-label">E-mail profissional</label>
           <div className="relative">
-            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
             <input
               id="reg-email" type="email" autoComplete="email" required
               value={email} onChange={e => setEmail(e.target.value)}
@@ -132,7 +132,7 @@ export default function RegisterPage() {
         <div>
           <label htmlFor="reg-password" className="input-label">Senha</label>
           <div className="relative">
-            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
             <input
               id="reg-password" type={showPassword ? 'text' : 'password'}
               autoComplete="new-password" required
@@ -143,7 +143,7 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
@@ -162,7 +162,7 @@ export default function RegisterPage() {
                         ? passwordStrength === 1 ? 'bg-danger-500'
                           : passwordStrength === 2 ? 'bg-warning-500'
                           : 'bg-success-500'
-                        : 'bg-slate-700',
+                        : 'bg-slate-200 dark:bg-slate-700',
                     )}
                   />
                 ))}
@@ -172,11 +172,11 @@ export default function RegisterPage() {
                   <div key={rule.label} className="flex items-center gap-2 text-xs">
                     <div className={clsx(
                       'w-3.5 h-3.5 rounded-full flex items-center justify-center',
-                      rule.test(password) ? 'bg-success-500' : 'bg-slate-700',
+                      rule.test(password) ? 'bg-success-500' : 'bg-slate-200 dark:bg-slate-700',
                     )}>
                       {rule.test(password) && <CheckCircle2 size={9} className="text-white" />}
                     </div>
-                    <span className={rule.test(password) ? 'text-success-500' : 'text-slate-500'}>
+                    <span className={rule.test(password) ? 'text-success-500' : 'text-slate-500 dark:text-slate-500'}>
                       {rule.label}
                     </span>
                   </div>
@@ -202,10 +202,10 @@ export default function RegisterPage() {
       {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-800" />
+          <div className="w-full border-t border-slate-200 dark:border-slate-800" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-slate-950 px-3 text-slate-500">ou cadastre-se com</span>
+          <span className="bg-slate-50 dark:bg-slate-950 px-3 text-slate-500">ou cadastre-se com</span>
         </div>
       </div>
 
@@ -231,9 +231,9 @@ export default function RegisterPage() {
 
       <p className="text-center text-xs text-slate-600">
         Ao criar uma conta, você concorda com nossos{' '}
-        <Link href="/terms" className="text-slate-500 hover:text-slate-400">Termos</Link>
+        <Link href="/terms" className="text-slate-600 dark:text-slate-500 hover:text-slate-900 dark:hover:text-slate-400">Termos</Link>
         {' '}e{' '}
-        <Link href="/privacy" className="text-slate-500 hover:text-slate-400">Política de Privacidade</Link>.
+        <Link href="/privacy" className="text-slate-600 dark:text-slate-500 hover:text-slate-900 dark:hover:text-slate-400">Política de Privacidade</Link>.
       </p>
     </div>
   )
