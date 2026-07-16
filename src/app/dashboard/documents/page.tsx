@@ -18,11 +18,11 @@ export default async function DocumentsPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('organization_id')
+    .select('org_id')
     .eq('id', user.id)
     .single()
 
-  if (!profile?.organization_id) {
+  if (!profile?.org_id) {
     redirect('/onboarding')
   }
 
@@ -47,7 +47,7 @@ export default async function DocumentsPage() {
 
       <div className="grid grid-cols-1 gap-6">
         {/* Usando o componente existente que já foi refatorado e faz a busca */}
-        <DocumentsList orgId={profile.organization_id} />
+        <DocumentsList orgId={profile.org_id} />
       </div>
     </div>
   )
