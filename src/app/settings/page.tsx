@@ -54,13 +54,16 @@ export default function SettingsPage() {
   const handleSubmitAudit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
+    const auditorEmail = formData.get('auditorEmail') as string
     const scope = formData.get('scope') as string
     const notes = formData.get('notes') as string
     
-    const subject = encodeURIComponent(`Solicitação de Auditoria Externa: ${scope}`)
-    const body = encodeURIComponent(`Olá equipe E-Compliance,\n\nGostaria de solicitar uma auditoria externa com o seguinte escopo: ${scope}.\n\nObservações Adicionais:\n${notes}\n\nAguardo retorno para os próximos passos.\n\nAtenciosamente,`)
+    const activationLink = `https://e-compliance.com/invite?token=${Math.random().toString(36).substr(2, 9)}&role=auditor`
     
-    window.location.href = `mailto:contato@e-compliance.com?subject=${subject}&body=${body}`
+    const subject = encodeURIComponent(`Convite para Auditoria Externa: ${scope}`)
+    const body = encodeURIComponent(`Olá,\n\nGostaria de solicitar uma auditoria externa com o seguinte escopo: ${scope}.\n\nPara acessar nosso ambiente e revisar nossas configurações e documentos, por favor utilize o link de acesso exclusivo abaixo (ele concederá acesso de Auditor à nossa conta):\n${activationLink}\n\nObservações Adicionais:\n${notes}\n\nAguardo retorno para os próximos passos.\n\nAtenciosamente,`)
+    
+    window.location.href = `mailto:${auditorEmail}?subject=${subject}&body=${body}`
     
     setShowAuditModal(false)
     toast.success('Seu cliente de e-mail foi aberto com a solicitação!')
@@ -199,8 +202,13 @@ export default function SettingsPage() {
             
             <form onSubmit={handleSubmitAudit} className="p-6 space-y-4">
               <p className="text-sm text-surface-slate dark:text-surface-fog mb-4">
-                Solicite uma revisão especializada para validar seus documentos e configurações de privacidade.
+                Solicite uma revisão especializada. Um convite será enviado com um link para o auditor acessar sua conta temporariamente.
               </p>
+
+              <div>
+                <label className="input-label">E-mail do Auditor</label>
+                <input name="auditorEmail" type="email" className="input-field" placeholder="auditor@consultoria.com" required />
+              </div>
 
               <div>
                 <label className="input-label">Escopo da Auditoria</label>
