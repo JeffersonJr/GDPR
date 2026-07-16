@@ -1,4 +1,5 @@
 import { BarChart3, Download, TrendingUp, ShieldAlert, Users } from 'lucide-react'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Relatórios | E-Compliance',
@@ -34,14 +35,16 @@ export default function ReportsPage() {
           <div className="text-xs text-success-600 dark:text-success-500 font-medium">+12% desde o último mês</div>
         </div>
 
-        <div className="glass-card p-6 flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-surface-slate dark:text-surface-fog mb-2">
-            <ShieldAlert size={18} />
-            <span className="text-sm font-medium">Riscos Pendentes</span>
+        <Link href="/dashboard/documents?status=pending" className="glass-card-hover p-6 flex flex-col gap-2 group cursor-pointer">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-surface-slate dark:text-surface-fog mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-500 transition-colors">
+              <ShieldAlert size={18} />
+              <span className="text-sm font-medium">Riscos Pendentes</span>
+            </div>
           </div>
           <div className="text-3xl font-bold text-warning-600 dark:text-warning-500">3</div>
           <div className="text-xs text-surface-slate dark:text-surface-fog font-medium">Requer atenção imediata</div>
-        </div>
+        </Link>
 
         <div className="glass-card p-6 flex flex-col gap-2">
           <div className="flex items-center gap-2 text-surface-slate dark:text-surface-fog mb-2">
@@ -90,9 +93,9 @@ export default function ReportsPage() {
             ))}
           </div>
           
-          <button className="mt-4 text-xs font-medium text-primary hover:text-primary-hover dark:text-primary-light dark:hover:text-white w-full text-center py-2 bg-primary-light/30 dark:bg-primary/10 rounded-lg transition-colors">
+          <Link href="/dashboard/documents?status=pending" className="mt-4 text-xs font-medium text-primary hover:text-primary-hover dark:text-primary-light dark:hover:text-white w-full text-center py-2 bg-primary-light/30 dark:bg-primary/10 rounded-lg transition-colors block">
             Ver Todos os Riscos
-          </button>
+          </Link>
         </div>
       </div>
     </div>
