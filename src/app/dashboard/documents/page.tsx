@@ -26,6 +26,12 @@ export default async function DocumentsPage() {
     redirect('/onboarding')
   }
 
+  const { data: documents } = await supabase
+    .from('documents')
+    .select('*')
+    .eq('org_id', profile.org_id)
+    .order('created_at', { ascending: true })
+
   return (
     <div className="page-section space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -46,8 +52,7 @@ export default async function DocumentsPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6">
-        {/* Usando o componente existente que já foi refatorado e faz a busca */}
-        <DocumentsList orgId={profile.org_id} />
+        <DocumentsList orgId={profile.org_id} documents={documents ?? []} />
       </div>
     </div>
   )
