@@ -53,12 +53,47 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      <div className="glass-card p-8 min-h-[400px] flex items-center justify-center flex-col text-center">
-        <BarChart3 size={48} className="text-surface-slate/30 dark:text-surface-fog/30 mb-4" />
-        <h3 className="text-lg font-semibold text-surface-ink dark:text-surface-snow">Gráficos Detalhados em Breve</h3>
-        <p className="text-sm text-surface-slate dark:text-surface-fog max-w-md mt-2">
-          Estamos integrando gráficos dinâmicos para mapeamento temporal de conformidade, relatórios DPO personalizados e logs de acesso detalhados.
-        </p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 glass-card p-6 min-h-[300px] flex items-center justify-center flex-col text-center">
+          <BarChart3 size={48} className="text-surface-slate/30 dark:text-surface-fog/30 mb-4" />
+          <h3 className="text-lg font-semibold text-surface-ink dark:text-surface-snow">Gráficos Detalhados em Breve</h3>
+          <p className="text-sm text-surface-slate dark:text-surface-fog max-w-md mt-2">
+            Estamos integrando gráficos dinâmicos para mapeamento temporal de conformidade, relatórios DPO personalizados e logs de acesso detalhados.
+          </p>
+        </div>
+
+        <div className="glass-card p-6 flex flex-col">
+          <h3 className="font-semibold text-surface-ink dark:text-surface-snow mb-4 flex items-center gap-2">
+            <ShieldAlert className="text-warning-500" size={18} />
+            Detalhamento de Riscos
+          </h3>
+          
+          <div className="space-y-4 flex-1">
+            {[
+              { title: 'Política de Cookies', desc: 'Aviso de consentimento ausente na home', severity: 'Alto' },
+              { title: 'DPA - Fornecedores', desc: 'Cláusula de auditoria não assinada', severity: 'Médio' },
+              { title: 'Registro de Atividades', desc: 'Faltam bases legais (Art. 6)', severity: 'Alto' },
+            ].map((risk, i) => (
+              <div key={i} className="p-3 bg-surface-snow dark:bg-surface-ink border border-surface-fog dark:border-surface-slate/20 rounded-xl">
+                <div className="flex justify-between items-start mb-1">
+                  <h4 className="text-sm font-semibold text-surface-ink dark:text-surface-snow">{risk.title}</h4>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    risk.severity === 'Alto' 
+                      ? 'bg-danger-50 text-danger-600 dark:bg-danger-500/10 dark:text-danger-500' 
+                      : 'bg-warning-50 text-warning-600 dark:bg-warning-500/10 dark:text-warning-500'
+                  }`}>
+                    {risk.severity}
+                  </span>
+                </div>
+                <p className="text-xs text-surface-slate dark:text-surface-fog">{risk.desc}</p>
+              </div>
+            ))}
+          </div>
+          
+          <button className="mt-4 text-xs font-medium text-primary hover:text-primary-hover dark:text-primary-light dark:hover:text-white w-full text-center py-2 bg-primary-light/30 dark:bg-primary/10 rounded-lg transition-colors">
+            Ver Todos os Riscos
+          </button>
+        </div>
       </div>
     </div>
   )

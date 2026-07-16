@@ -103,16 +103,19 @@ export default function Sidebar({ profile }: SidebarProps) {
 
       {/* Bottom nav + user */}
       <div className="p-4 border-t border-surface-fog dark:border-surface-slate/20 space-y-1">
-        {bottomNavItems.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={clsx(pathname.startsWith(href) ? 'nav-item-active' : 'nav-item')}
-          >
-            <Icon size={18} />
-            {label}
-          </Link>
-        ))}
+        {bottomNavItems.map(({ href, label, icon: Icon }) => {
+          const isActive = href === '/settings' ? pathname === href : pathname.startsWith(href)
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={clsx(isActive ? 'nav-item-active' : 'nav-item')}
+            >
+              <Icon size={18} />
+              {label}
+            </Link>
+          )
+        })}
 
         {/* User card */}
         <div className="mt-3 pt-3 border-t border-surface-fog dark:border-surface-slate/20">

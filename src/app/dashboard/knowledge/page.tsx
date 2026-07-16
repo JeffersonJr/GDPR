@@ -40,7 +40,7 @@ export default function KnowledgeBasePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {articles.map((article) => (
-          <Link href="#" key={article.id} className="glass-card-hover p-5 flex items-start gap-4 cursor-pointer group">
+          <Link href={`/dashboard/knowledge/${article.id}`} key={article.id} className="glass-card-hover p-5 flex items-start gap-4 cursor-pointer group">
             <div className="p-3 bg-surface-cream dark:bg-surface-ink rounded-lg border border-surface-fog dark:border-surface-slate/20">
               <Scale size={20} className="text-primary" />
             </div>
