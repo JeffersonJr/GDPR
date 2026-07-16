@@ -6,6 +6,8 @@ import { Upload, FileText, FileUp, ChevronRight, CheckCircle2 } from 'lucide-rea
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { clsx } from 'clsx'
+import { createClient } from '@/lib/supabase/client'
+import { createDocumentAction, auditDocumentAiAction } from '@/lib/actions'
 
 export default function UploadDocumentPage() {
   const router = useRouter()
@@ -19,12 +21,50 @@ export default function UploadDocumentPage() {
 
     setLoading(true)
     
-    // Simulate upload and analysis
-    setTimeout(() => {
-      setLoading(false)
-      toast.success('Documento enviado e enviado para análise!')
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error("Usuário não autenticado")
+
+      const { data: profile } = await supabase.from('profiles').select('org_id').eq('id', user.id).single()
+      if (!profile?.org_id) throw new Error("Organização não encontrada")
+
+      // 1. Upload the file to storage
+      const fileName = `${profile.org_id}/uploads/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`
+      const { error: uploadError } = await supabase.storage
+        .from('documents')
+        .upload(fileName, file)
+
+      if (uploadError) throw uploadError
+
+      const { data: { publicUrl } } = supabase.storage.from('documents').getPublicUrl(fileName)
+
+      // 2. Create the document record
+      const { data: doc, error: createErr } = await createDocumentAction({
+        org_id: profile.org_id,
+        name: file.name,
+        type: 'upload',
+        status: 'analyzing',
+        generated_by_ai: false,
+        original_url: publicUrl
+      })
+
+      if (createErr || !doc) throw new Error(createErr || "Falha ao criar o documento")
+
+      // 3. Start AI audit
+      const { error: auditErr } = await auditDocumentAiAction(doc.id)
+      
+      if (auditErr) {
+        if (auditErr === 'limit_reached') throw new Error("Limite de análise por IA atingido para o seu plano.")
+        throw new Error(auditErr)
+      }
+
+      toast.success('Documento enviado e análise concluída!')
       router.push('/dashboard/documents')
-    }, 2000)
+    } catch (err: any) {
+      toast.error('Erro no processamento', { description: err.message })
+      setLoading(false)
+    }
   }
 
   const handleDrop = (e: React.DragEvent) => {

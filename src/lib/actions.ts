@@ -266,8 +266,9 @@ export async function createDocumentAction(payload: {
   org_id: string
   name: string
   type: string
-  status?: 'pending' | 'generating'
+  status?: 'pending' | 'generating' | 'analyzing'
   generated_by_ai?: boolean
+  original_url?: string
 }) {
   const supabase = await createClient()
 
@@ -282,6 +283,7 @@ export async function createDocumentAction(payload: {
       type: payload.type,
       status: payload.status ?? 'pending',
       generated_by_ai: payload.generated_by_ai ?? false,
+      original_url: payload.original_url ?? null,
       created_by: user.id,
     })
     .select()

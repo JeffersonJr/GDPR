@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { Sparkles, FileText, ChevronRight, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { clsx } from 'clsx'
+import { toast } from 'sonner'
+import { createClient } from '@/lib/supabase/client'
+import { createDocumentAction, generateDocumentAiAction } from '@/lib/actions'
 
 const docTypes = [
   { id: 'privacy_policy', label: 'Política de Privacidade', desc: 'Conforme Art. 13 e 14 da GDPR' },
@@ -18,12 +21,40 @@ export default function GenerateDocumentPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [isDone, setIsDone] = useState(false)
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     setIsGenerating(true)
-    setTimeout(() => {
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error("Usuário não autenticado")
+      
+      const { data: profile } = await supabase.from('profiles').select('org_id').eq('id', user.id).single()
+      if (!profile?.org_id) throw new Error("Organização não encontrada")
+
+      const docName = docTypes.find(d => d.id === selectedType)?.label || 'Documento Gerado'
+
+      const { data: doc, error: createErr } = await createDocumentAction({
+        org_id: profile.org_id,
+        name: docName,
+        type: selectedType,
+        status: 'generating',
+        generated_by_ai: true
+      })
+
+      if (createErr || !doc) throw new Error(createErr || "Falha ao criar o documento")
+
+      const { error: genErr } = await generateDocumentAiAction(doc.id)
+      if (genErr) {
+        if (genErr === 'limit_reached') throw new Error("Limite de geração por IA atingido para o seu plano.")
+        throw new Error(genErr)
+      }
+
       setIsGenerating(false)
       setIsDone(true)
-    }, 3000)
+    } catch (err: any) {
+      toast.error('Erro ao gerar documento', { description: err.message })
+      setIsGenerating(false)
+    }
   }
 
   if (isDone) {
