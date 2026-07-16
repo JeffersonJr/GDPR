@@ -1,11 +1,12 @@
 'use client'
 
-import { Settings, Save, Building, Mail, Shield, KeyRound, User } from 'lucide-react'
+import { Settings, Save, Building, Mail, Shield, KeyRound, User, Download, Send } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
 export default function SettingsPage() {
   const [showAuditModal, setShowAuditModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,38 +18,52 @@ export default function SettingsPage() {
     toast.success('Senha alterada com sucesso! Você receberá um email de confirmação.')
   }
 
-  const handleExportData = () => {
-    const data = {
-      user: {
-        name: "DPO User",
-        email: "dpo@empresa.com",
-        role: "DPO",
-        settings: { notifications: true, twoFactor: true }
-      },
-      exportDate: new Date().toISOString(),
-      compliance: {
-        gdprArticle: 20,
-        description: "Data portability export"
+  const handleExportData = (method: 'download' | 'email') => {
+    setShowExportModal(false)
+    if (method === 'download') {
+      const data = {
+        user: {
+          name: "DPO User",
+          email: "dpo@empresa.com",
+          role: "DPO",
+          settings: { notifications: true, twoFactor: true }
+        },
+        exportDate: new Date().toISOString(),
+        compliance: {
+          gdprArticle: 20,
+          description: "Data portability export"
+        }
       }
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'gdpr_export_data.json'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      
+      toast.success('Download do arquivo (JSON) iniciado com sucesso.')
+    } else {
+      toast.success('Um link para download seguro dos seus dados foi enviado para dpo@empresa.com.')
     }
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'gdpr_export_data.json'
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-    
-    toast.success('Exportação de dados iniciada (JSON).')
   }
 
-  const handleSubmitAudit = (e: React.FormEvent) => {
+  const handleSubmitAudit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const scope = formData.get('scope') as string
+    const notes = formData.get('notes') as string
+    
+    const subject = encodeURIComponent(`Solicitação de Auditoria Externa: ${scope}`)
+    const body = encodeURIComponent(`Olá equipe E-Compliance,\n\nGostaria de solicitar uma auditoria externa com o seguinte escopo: ${scope}.\n\nObservações Adicionais:\n${notes}\n\nAguardo retorno para os próximos passos.\n\nAtenciosamente,`)
+    
+    window.location.href = `mailto:contato@e-compliance.com?subject=${subject}&body=${body}`
+    
     setShowAuditModal(false)
-    toast.success('Solicitação de auditoria enviada com sucesso! Nossa equipe entrará em contato.')
+    toast.success('Seu cliente de e-mail foi aberto com a solicitação!')
   }
 
   return (
@@ -135,7 +150,7 @@ export default function SettingsPage() {
             </h3>
             <div className="space-y-3">
               <button 
-                onClick={handleExportData}
+                onClick={() => setShowExportModal(true)}
                 className="w-full text-left px-4 py-3 rounded-xl border border-surface-fog dark:border-surface-slate/30 hover:bg-surface-snow dark:hover:bg-surface-slate/10 text-sm font-medium transition-colors text-surface-ink dark:text-surface-snow"
               >
                 Exportar meus dados (Art. 20 GDPR)
@@ -189,16 +204,16 @@ export default function SettingsPage() {
 
               <div>
                 <label className="input-label">Escopo da Auditoria</label>
-                <select className="input-field" required>
-                  <option value="completa">Auditoria Completa (GDPR/LGPD)</option>
-                  <option value="documentos">Apenas Revisão de Documentos</option>
-                  <option value="seguranca">Auditoria de Segurança / Infra</option>
+                <select name="scope" className="input-field" required>
+                  <option value="Auditoria Completa (GDPR/LGPD)">Auditoria Completa (GDPR/LGPD)</option>
+                  <option value="Apenas Revisão de Documentos">Apenas Revisão de Documentos</option>
+                  <option value="Auditoria de Segurança / Infraestrutura">Auditoria de Segurança / Infraestrutura</option>
                 </select>
               </div>
               
               <div>
                 <label className="input-label">Observações Adicionais (Opcional)</label>
-                <textarea className="input-field min-h-[100px]" placeholder="Descreva áreas de maior preocupação..."></textarea>
+                <textarea name="notes" className="input-field min-h-[100px]" placeholder="Descreva áreas de maior preocupação..."></textarea>
               </div>
               
               <div className="pt-4 flex justify-end gap-3">
@@ -206,10 +221,48 @@ export default function SettingsPage() {
                   Cancelar
                 </button>
                 <button type="submit" className="btn-primary">
-                  Enviar Solicitação
+                  Enviar E-mail de Solicitação
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showExportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-ink/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-surface-ink w-full max-w-sm rounded-2xl shadow-2xl border border-surface-fog dark:border-surface-slate/20 overflow-hidden text-center p-6">
+            <h2 className="text-xl font-bold text-surface-ink dark:text-surface-snow mb-2">
+              Exportar Dados
+            </h2>
+            <p className="text-sm text-surface-slate dark:text-surface-fog mb-6">
+              Como você prefere receber o arquivo JSON contendo todos os seus dados estruturados?
+            </p>
+
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={() => handleExportData('download')} 
+                className="w-full btn-primary flex items-center justify-center gap-2 py-3"
+              >
+                <Download size={18} />
+                Baixar para o Computador
+              </button>
+              
+              <button 
+                onClick={() => handleExportData('email')} 
+                className="w-full btn-secondary flex items-center justify-center gap-2 py-3 border border-surface-fog dark:border-surface-slate/30"
+              >
+                <Send size={18} />
+                Receber por E-mail
+              </button>
+              
+              <button 
+                onClick={() => setShowExportModal(false)} 
+                className="w-full mt-2 text-sm text-surface-slate hover:text-surface-ink dark:text-surface-fog dark:hover:text-surface-snow py-2"
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
         </div>
       )}
