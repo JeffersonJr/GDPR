@@ -60,28 +60,33 @@ function ScoreRing({ score }: { score: number }) {
 
 // ---- Stat Card ----
 function StatCard({
-  label, value, sub, icon: Icon, iconColor, trend,
+  label, value, sub, icon: Icon, iconColor, trend, href
 }: {
   label: string; value: string | number; sub?: string
-  icon: React.ElementType; iconColor: string; trend?: string
+  icon: React.ElementType; iconColor: string; trend?: string; href?: string
 }) {
-  return (
-    <div className="glass-card p-5 flex items-start gap-4 hover:border-slate-300 dark:hover:border-slate-700/60 transition-all group">
+  const content = (
+    <div className="glass-card-hover p-5 flex items-start gap-4 transition-all group h-full">
       <div className={clsx('w-10 h-10 rounded-xl flex items-center justify-center shrink-0', iconColor)}>
         <Icon size={18} className="text-white" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-2xl font-black text-slate-900 dark:text-white">{value}</div>
-        <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{label}</div>
-        {sub && <div className="text-xs text-slate-400 dark:text-slate-500 mt-1">{sub}</div>}
+        <div className="text-2xl font-black text-surface-ink dark:text-surface-snow">{value}</div>
+        <div className="text-xs text-surface-slate dark:text-surface-fog mt-0.5">{label}</div>
+        {sub && <div className="text-xs text-surface-slate dark:text-surface-fog opacity-70 mt-1">{sub}</div>}
       </div>
       {trend && (
-        <div className="flex items-center gap-0.5 text-xs text-success-500 font-medium">
+        <div className="flex items-center gap-0.5 text-xs text-success-500 font-medium shrink-0">
           <ArrowUpRight size={12} /> {trend}
         </div>
       )}
     </div>
   )
+
+  if (href) {
+    return <Link href={href} className="block h-full">{content}</Link>
+  }
+  return <div className="h-full">{content}</div>
 }
 
 // ---- Status Badge ----
@@ -261,7 +266,6 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
           </div>
         </div>
 
-        {/* Stats */}
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard
             label="Documentos regularizados"
@@ -269,6 +273,7 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
             sub={`de ${totalRequired} obrigatórios`}
             icon={CheckCircle2}
             iconColor="bg-success-500"
+            href="/dashboard/documents?status=compliant"
           />
           <StatCard
             label="Ações pendentes"
@@ -276,13 +281,15 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
             sub={`${missingCount} faltando · ${pendingCount} em análise`}
             icon={AlertTriangle}
             iconColor="bg-warning-500"
+            href="/dashboard/documents?status=pending"
           />
           <StatCard
             label="Documentos analisados"
             value={documents.length}
             sub="total de documentos"
             icon={BarChart3}
-            iconColor="bg-brand-600"
+            iconColor="bg-primary"
+            href="/dashboard/documents"
           />
         </div>
       </div>
