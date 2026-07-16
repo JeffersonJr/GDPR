@@ -119,11 +119,11 @@ export default function ReportsPage() {
             
             <div className="p-6 overflow-y-auto flex-1 space-y-4">
               {[
-                { title: 'Política de Cookies', desc: 'Aviso de consentimento ausente na home. Risco de multa por não cumprimento do ePrivacy Directive.', severity: 'Alto', action: 'Gerar Política de Cookies' },
-                { title: 'DPA - Fornecedores', desc: 'Cláusula de auditoria não assinada com provedor de nuvem principal (AWS).', severity: 'Médio', action: 'Revisar DPA' },
-                { title: 'Registro de Atividades', desc: 'Faltam bases legais (Art. 6) documentadas para a coleta de dados de marketing.', severity: 'Alto', action: 'Preencher RoPA' },
-                { title: 'Termos de Uso', desc: 'Seção de foro aplicável desatualizada em relação à nova diretiva de defesa do consumidor.', severity: 'Baixo', action: 'Atualizar Termos' },
-                { title: 'Notificação de Violação', desc: 'Não há procedimento documentado para notificação de incidentes em até 72h.', severity: 'Médio', action: 'Criar Procedimento' },
+                { title: 'Política de Cookies', desc: 'Aviso de consentimento ausente na home. Risco de multa por não cumprimento do ePrivacy Directive.', severity: 'Alto', action: 'Gerar Política de Cookies', href: '/dashboard/documents/generate' },
+                { title: 'DPA - Fornecedores', desc: 'Cláusula de auditoria não assinada com provedor de nuvem principal (AWS).', severity: 'Médio', action: 'Revisar DPA', href: '/dashboard/documents/upload' },
+                { title: 'Registro de Atividades', desc: 'Faltam bases legais (Art. 6) documentadas para a coleta de dados de marketing.', severity: 'Alto', action: 'Preencher RoPA', href: '/dashboard/documents/generate' },
+                { title: 'Termos de Uso', desc: 'Seção de foro aplicável desatualizada em relação à nova diretiva de defesa do consumidor.', severity: 'Baixo', action: 'Atualizar Termos', href: '/dashboard/documents/upload' },
+                { title: 'Notificação de Violação', desc: 'Não há procedimento documentado para notificação de incidentes em até 72h.', severity: 'Médio', action: 'Criar Procedimento', href: '/dashboard/documents/generate' },
               ].map((risk, i) => (
                 <div key={i} className="p-4 bg-surface-snow dark:bg-surface-slate/10 border border-surface-fog dark:border-surface-slate/20 rounded-xl flex flex-col sm:flex-row gap-4 justify-between items-start">
                   <div>
@@ -139,7 +139,7 @@ export default function ReportsPage() {
                     </div>
                     <p className="text-sm text-surface-slate dark:text-surface-fog max-w-lg">{risk.desc}</p>
                   </div>
-                  <Link href="/dashboard/documents" className="btn-secondary whitespace-nowrap text-xs shrink-0 py-1.5 px-3">
+                  <Link href={risk.href} className="btn-secondary whitespace-nowrap text-xs shrink-0 py-1.5 px-3">
                     {risk.action}
                   </Link>
                 </div>

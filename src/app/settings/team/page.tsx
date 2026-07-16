@@ -1,8 +1,9 @@
 'use client'
 
-import { Users, UserPlus, Shield, MoreVertical, Trash2 } from 'lucide-react'
+import { Users, UserPlus, Shield, MoreVertical, Trash2, Settings } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 export default function TeamPage() {
   const [teamMembers, setTeamMembers] = useState([
@@ -94,13 +95,31 @@ export default function TeamPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button 
-                      onClick={() => handleRemove(member.id)}
-                      className="p-2 text-surface-slate hover:text-danger-600 dark:text-surface-fog dark:hover:text-danger-500 hover:bg-danger-50 dark:hover:bg-danger-500/10 rounded-lg transition-colors"
-                      title="Remover usuário"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <details className="relative group">
+                        <summary className="p-2 text-surface-slate hover:text-surface-ink dark:text-surface-fog dark:hover:text-surface-snow hover:bg-surface-snow dark:hover:bg-surface-slate/20 rounded-lg transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden focus:outline-none">
+                          <MoreVertical size={16} />
+                        </summary>
+                        <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-surface-ink border border-surface-fog dark:border-surface-slate/30 rounded-xl shadow-xl z-10 py-1 text-left hidden group-open:block animate-in fade-in zoom-in-95">
+                          <Link href="/settings" className="w-full px-4 py-2 text-sm text-surface-ink dark:text-surface-snow hover:bg-surface-snow dark:hover:bg-surface-slate/10 transition-colors flex items-center gap-2">
+                            <Settings size={14} />
+                            Configurações
+                          </Link>
+                          <button 
+                            onClick={(e) => {
+                              // Close details
+                              const details = e.currentTarget.closest('details')
+                              if (details) details.removeAttribute('open')
+                              handleRemove(member.id)
+                            }}
+                            className="w-full text-left px-4 py-2 text-sm text-danger-600 dark:text-danger-500 hover:bg-danger-50 dark:hover:bg-danger-500/10 transition-colors flex items-center gap-2"
+                          >
+                            <Trash2 size={14} />
+                            Remover
+                          </button>
+                        </div>
+                      </details>
+                    </div>
                   </td>
                 </tr>
               ))}
