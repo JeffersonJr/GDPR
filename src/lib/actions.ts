@@ -163,12 +163,15 @@ interface OnboardingPayload {
 export async function completeOnboardingAction(payload: OnboardingPayload) {
   const supabase = await createClient()
 
-  // Verify auth
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Não autenticado' }
 
+  // Use service client to bypass RLS because the user's profile doesn't have the org_id yet,
+  // which causes the .select() to fail on the organizations table SELECT policy.
+  const supabaseAdmin = createServiceClient()
+
   // 1. Create organization
-  const { data: org, error: orgError } = await (supabase as any)
+  const { data: org, error: orgError } = await (supabaseAdmin as any)
     .from('organizations')
     .insert({
       name: payload.org_name,
@@ -186,7 +189,7 @@ export async function completeOnboardingAction(payload: OnboardingPayload) {
   if (orgError) return { error: (orgError as any).message }
 
   // 2. Link user as org admin
-  const { error: profileError } = await (supabase as any)
+  const { error: profileError } = await (supabaseAdmin as any)
     .from('profiles')
     .update({ org_id: org.id, role: 'admin' })
     .eq('id', user.id)
