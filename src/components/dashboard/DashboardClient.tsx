@@ -1,7 +1,10 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { toast } from 'sonner'
+import { createDocumentAction, generateDocumentAiAction } from '@/lib/actions'
 import {
   FileText, Sparkles, Upload, CheckCircle2, Clock, XCircle,
   Loader2, Eye, ShieldAlert, TrendingUp, AlertTriangle, Shield,
@@ -196,6 +199,8 @@ function DocumentRow({ doc, type }: { doc: DocRow; type: string }) {
 
 // ---- Main Dashboard Client ----
 export default function DashboardClient({ profile, org, documents, requiredDocs }: Props) {
+  const router = useRouter()
+  const [isGeneratingAll, setIsGeneratingAll] = useState(false)
   const docMap = useMemo(() => new Map(documents.map(d => [d.type, d])), [documents])
 
   const displayTypes = useMemo(() => {
@@ -385,13 +390,46 @@ export default function DashboardClient({ profile, org, documents, requiredDocs 
                 <span className="text-slate-900 dark:text-white font-semibold">{missingCount} documentos</span> podem ser gerados automaticamente pela IA
               </span>
             </div>
-            <Link
-              href="/dashboard/documents/generate"
-              className="btn-primary text-xs px-4 py-2 shrink-0"
+            <button
+              onClick={async () => {
+                const missingTypes = displayTypes.filter(type => !docMap.has(type as any))
+                if (missingTypes.length === 0) return
+
+                setIsGeneratingAll(true)
+                const task = async () => {
+                  for (const type of missingTypes) {
+                    const docName = getDocumentTypeLabel(type)
+                    const { data: doc, error: createErr } = await createDocumentAction({
+                      org_id: org.id,
+                      name: docName,
+                      type: type,
+                      status: 'generating',
+                      generated_by_ai: true
+                    })
+
+                    if (createErr || !doc) throw new Error(createErr || `Falha ao criar o documento ${docName}`)
+
+                    const { error: genErr } = await generateDocumentAiAction(doc.id)
+                    if (genErr) {
+                      if (genErr === 'limit_reached') throw new Error(`Limite de IA atingido ao gerar ${docName}. Faça upgrade do seu plano.`)
+                      throw new Error(genErr)
+                    }
+                  }
+                  router.refresh()
+                }
+
+                toast.promise(task().finally(() => setIsGeneratingAll(false)), {
+                  loading: 'Gerando documentos com IA (isso pode demorar uns minutos)...',
+                  success: 'Todos os documentos foram gerados com sucesso!',
+                  error: (err) => `Erro: ${err.message}`,
+                })
+              }}
+              disabled={isGeneratingAll}
+              className="btn-primary text-xs px-4 py-2 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
               id="btn-generate-all"
             >
-              Gerar todos
-            </Link>
+              {isGeneratingAll ? <><Loader2 size={14} className="animate-spin mr-1" /> Gerando...</> : 'Gerar todos'}
+            </button>
           </div>
         )}
       </div>
